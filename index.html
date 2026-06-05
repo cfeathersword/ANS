@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANS Pharmacology — Interactive Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --border: rgba(0,0,0,0.10);
+    --border-med: rgba(0,0,0,0.18);
+    --text: #1a1814;
+    --text-2: #5a5650;
+    --text-3: #9a9690;
+    --coral: #c94a28;
+    --coral-bg: #fdf0eb;
+    --coral-border: #f0c0a8;
+    --teal: #0f6e56;
+    --teal-bg: #eaf5f0;
+    --teal-border: #a8dece;
+    --blue: #1a5fa8;
+    --blue-bg: #eaf2fc;
+    --blue-border: #a8cafe;
+    --purple: #5c3fa0;
+    --purple-bg: #f2eefe;
+    --purple-border: #c8b8f0;
+    --amber: #8a5800;
+    --amber-bg: #fef7e6;
+    --amber-border: #f0d890;
+    --gray: #48443e;
+    --gray-bg: #f0ede8;
+    --gray-border: #d0cdc8;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --radius-pill: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── LAYOUT ── */
+  .app-shell {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-med);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .app-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+  }
+  .app-subtitle {
+    font-size: 13px;
+    color: var(--text-3);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+  .course-badge {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--text);
+    color: var(--bg);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .nav-btn {
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-med);
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border-med); }
+  .nav-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .card p:last-child { margin-bottom: 0; }
+  .card p strong { color: var(--text); font-weight: 600; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 12px; }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    padding: 3px 11px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  .tag-coral  { background: var(--coral-bg);  color: var(--coral);  border: 1px solid var(--coral-border); }
+  .tag-teal   { background: var(--teal-bg);   color: var(--teal);   border: 1px solid var(--teal-border); }
+  .tag-blue   { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .tag-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .tag-amber  { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .tag-gray   { background: var(--gray-bg);   color: var(--gray);   border: 1px solid var(--gray-border); }
+
+  /* ── BADGE (inline) ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 8px;
+    margin-left: 4px;
+    background: var(--coral-bg); color: var(--coral);
+    border: 1px solid var(--coral-border);
+  }
+  .badge-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-border); }
+  .badge-teal   { background: var(--teal-bg);   color: var(--teal);   border-color: var(--teal-border); }
+
+  /* ── TABLE ROWS ── */
+  .row {
+    display: flex;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .row:first-of-type { border-top: 1px solid var(--border); margin-top: 10px; }
+  .row:last-child { border-bottom: none; }
+  .row-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 140px;
+    flex-shrink: 0;
+    padding-top: 1px;
+    letter-spacing: 0.01em;
+  }
+  .row-detail { font-size: 13px; color: var(--text-2); flex: 1; line-height: 1.55; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text-2);
+    margin-top: 12px;
+    line-height: 1.6;
+    border-left: 3px solid var(--border-med);
+  }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  /* ── STEPPER ── */
+  .step-dots { display: flex; gap: 7px; margin-bottom: 16px; }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border-med);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+  .dot:hover { background: var(--text-3); }
+  .dot.active { background: var(--text); transform: scale(1.2); }
+  .step-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    gap: 12px;
+  }
+  .step-counter {
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .btn {
+    padding: 8px 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-med);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .btn:hover { background: var(--surface2); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .btn-primary:hover { opacity: 0.85; background: var(--text); }
+
+  /* ── RECEPTORS ── */
+  .receptor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 12px; }
+  .receptor-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .receptor-card:hover { background: var(--surface2); border-color: var(--border-med); }
+  .receptor-card.selected { border-color: var(--text); background: var(--surface2); }
+  .rec-name { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .rec-gp { font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 0.04em; margin-bottom: 6px; }
+  .rec-msg { font-size: 12px; color: var(--text-2); line-height: 1.45; }
+
+  .detail-panel {
+    background: var(--surface);
+    border: 1px solid var(--border-med);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    min-height: 80px;
+  }
+  .detail-empty { font-size: 13px; color: var(--text-3); font-style: italic; }
+
+  /* ── CASCADES ── */
+  .cascade-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .pathway-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+  }
+  .pathway-step {
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .step-arrow { text-align: center; color: var(--text-3); font-size: 14px; margin: 2px 0; line-height: 1; }
+
+  .step-coral  { background: var(--coral-bg);  color: var(--coral); }
+  .step-teal   { background: var(--teal-bg);   color: var(--teal); }
+  .step-blue   { background: var(--blue-bg);   color: var(--blue); }
+  .step-amber  { background: var(--amber-bg);  color: var(--amber); }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  /* ── SECTION INTRO ── */
+  .section-intro {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="app-header">
+    <div>
+      <div class="app-title">Autonomic Nervous System</div>
+      <div class="app-subtitle">Interactive pharmacology reference — PHAR222</div>
+    </div>
+    <div class="course-badge">UNE · PHAR222</div>
+  </header>
+
+  <nav id="main-nav">
+    <button class="nav-btn active" onclick="showSection('ans')">ANS overview</button>
+    <button class="nav-btn" onclick="showSection('sympathetic')">Sympathetic pathway</button>
+    <button class="nav-btn" onclick="showSection('receptors')">Adrenergic receptors</button>
+    <button class="nav-btn" onclick="showSection('cascades')">Signal cascades</button>
+    <button class="nav-btn" onclick="showSection('cardiac')">Cardiac PKA</button>
+    <button class="nav-btn" onclick="showSection('drugs')">Drug targets</button>
+  </nav>
+
+  <!-- ══════════ ANS OVERVIEW ══════════ -->
+  <div id="ans" class="section visible">
+    <div class="grid2">
+      <div class="card">
+        <span class="tag tag-coral">Sympathetic</span>
+        <div class="card-title">"Fight or flight"</div>
+        <p>Origin: thoracolumbar (T1–L2). Short preganglionic → paravertebral or prevertebral ganglion → long postganglionic. Releases <strong>noradrenaline</strong> at target organs (with one key exception).</p>
+        <div class="row"><span class="row-label">Ganglion NT</span><span class="row-detail">ACh → nicotinic (Nn)</span></div>
+        <div class="row"><span class="row-label">Effector NT</span><span class="row-detail">Noradrenaline → adrenergic receptors</span></div>
+        <div class="row"><span class="row-label">Exception</span><span class="row-detail">Sweat glands — sympathetic but uses ACh → muscarinic M</span></div>
+        <div class="row"><span class="row-label">Adrenal medulla</span><span class="row-detail">Direct preganglionic innervation → releases adrenaline (80%) + NA (20%) into bloodstream</span></div>
+      </div>
+      <div class="card">
+        <span class="tag tag-teal">Parasympathetic</span>
+        <div class="card-title">"Rest and digest"</div>
+        <p>Origin: craniosacral (CN III, VII, IX, X; S2–4). Long preganglionic → ganglion near/within target → short postganglionic. Uses <strong>acetylcholine</strong> at both synapses.</p>
+        <div class="row"><span class="row-label">Ganglion NT</span><span class="row-detail">ACh → nicotinic (Nn)</span></div>
+        <div class="row"><span class="row-label">Effector NT</span><span class="row-detail">ACh → muscarinic receptors (M1–M5)</span></div>
+        <div class="row"><span class="row-label">Key cranial nerve</span><span class="row-detail">Vagus (CN X) — heart, lungs, GI tract</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Target organ effects</div>
+      <div class="row"><span class="row-label">Heart</span><span class="row-detail">Symp: ↑ rate, ↑ force <span class="badge badge-purple">β1</span> &nbsp;|&nbsp; Para: ↓ rate <span class="badge badge-teal">M2</span></span></div>
+      <div class="row"><span class="row-label">Lungs</span><span class="row-detail">Symp: bronchodilation <span class="badge badge-purple">β2</span> &nbsp;|&nbsp; Para: bronchoconstriction <span class="badge badge-teal">M3</span></span></div>
+      <div class="row"><span class="row-label">Pupils</span><span class="row-detail">Symp: dilation / mydriasis <span class="badge">α1</span> &nbsp;|&nbsp; Para: constriction / miosis <span class="badge badge-teal">M3</span></span></div>
+      <div class="row"><span class="row-label">Blood vessels</span><span class="row-detail">Symp: vasoconstriction <span class="badge">α1</span> &nbsp; vasodilation in skeletal muscle <span class="badge badge-purple">β2</span></span></div>
+      <div class="row"><span class="row-label">GI tract</span><span class="row-detail">Symp: ↓ motility, sphincter contraction &nbsp;|&nbsp; Para: ↑ motility, secretion <span class="badge badge-teal">M3</span></span></div>
+      <div class="row"><span class="row-label">Bladder</span><span class="row-detail">Symp: detrusor relaxation <span class="badge badge-purple">β3</span> &nbsp;|&nbsp; Para: detrusor contraction <span class="badge badge-teal">M3</span></span></div>
+      <div class="row"><span class="row-label">Liver</span><span class="row-detail">Symp: glycogenolysis → ↑ blood glucose <span class="badge badge-purple">β2</span></span></div>
+      <div class="row"><span class="row-label">Sweat glands</span><span class="row-detail">Symp innervation but ACh → muscarinic M (the classic exception)</span></div>
+    </div>
+
+    <div class="callout">
+      <strong>Key distinction:</strong> Both divisions use ACh at the preganglionic (first) synapse onto nicotinic receptors. The divergence happens at the second synapse — sympathetic switches to noradrenaline onto adrenergic receptors; parasympathetic stays with ACh onto muscarinic receptors.
+    </div>
+  </div>
+
+  <!-- ══════════ SYMPATHETIC PATHWAY ══════════ -->
+  <div id="sympathetic" class="section">
+    <p class="section-intro">The sympathetic response is a cascade — from CNS detection to body-wide effect.</p>
+    <div class="step-dots" id="symp-dots"></div>
+    <div class="card" id="symp-panel"></div>
+    <div class="step-nav">
+      <button class="btn" id="symp-prev" onclick="sympMove(-1)">← Back</button>
+      <span class="step-counter" id="symp-label"></span>
+      <button class="btn btn-primary" id="symp-next" onclick="sympMove(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ ADRENERGIC RECEPTORS ══════════ -->
+  <div id="receptors" class="section">
+    <p class="section-intro">Select a receptor to see its G protein coupling, second messenger, locations, effects, and clinical drugs.</p>
+    <div class="receptor-grid" id="rec-grid"></div>
+    <div class="detail-panel" id="rec-detail">
+      <p class="detail-empty">Select a receptor above to see its full profile.</p>
+    </div>
+  </div>
+
+  <!-- ══════════ SIGNAL CASCADES ══════════ -->
+  <div id="cascades" class="section">
+    <p class="section-intro">Three parallel G protein pathways — all triggered by adrenergic receptor activation, all producing different downstream effects.</p>
+    <div class="cascade-grid">
+
+      <div class="pathway-col">
+        <span class="tag tag-blue">Gs pathway — β1, β2, β3</span>
+        <div class="pathway-step step-blue">NA / adrenaline binds β receptor</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-blue">Gsα subunit dissociates (GDP → GTP)</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-blue">Adenylyl cyclase activated</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-blue">ATP → ↑ cAMP</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-blue">PKA catalytic subunits released</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-blue">Phosphorylation of HCN channels, L-type Ca²⁺ channels, RyR2, phospholamban, troponin I</div>
+        <div class="callout"><strong>PDE inhibitors</strong> (milrinone) block cAMP breakdown → mimic β1 stimulation → ↑ HR and contractility without receptor activation.</div>
+      </div>
+
+      <div class="pathway-col">
+        <span class="tag tag-teal">Gi pathway — α2</span>
+        <div class="pathway-step step-teal">NA binds α2 receptor</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-teal">Giα subunit dissociates</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-teal">Adenylyl cyclase <em>inhibited</em></div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-teal">↓ cAMP production</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-teal">↓ PKA activity</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-teal">↓ NA release (presynaptic negative feedback), ↓ BP, CNS sedation, ↓ insulin</div>
+        <div class="callout"><strong>Clonidine</strong> is an α2 agonist — activates this feedback loop to reduce sympathetic output. Used in hypertension, ADHD, and opioid withdrawal.</div>
+      </div>
+
+      <div class="pathway-col">
+        <span class="tag tag-amber">Gq pathway — α1</span>
+        <div class="pathway-step step-amber">NA binds α1 receptor</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-amber">Gqα subunit dissociates</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-amber">Phospholipase C (PLC) activated</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-amber">PIP2 cleaved → IP3 + DAG</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-amber">IP3 → ↑ Ca²⁺ from ER &nbsp;|&nbsp; DAG → activates PKC</div>
+        <div class="step-arrow">↓</div>
+        <div class="pathway-step step-amber">Smooth muscle contraction via myosin light chain kinase activation</div>
+        <div class="callout"><strong>Prazosin</strong> blocks α1 → prevents Gq activation → vasodilation. Used in hypertension and BPH.</div>
+      </div>
+
+    </div>
+
+    <div class="callout" style="margin-top:12px">
+      <strong>Comparison point:</strong> Gs (β) and Gq (α1) both increase Ca²⁺ in the cell, but through entirely different routes and with opposite effects on smooth muscle. Gs/PKA phosphorylates myosin light chain kinase to <em>inactivate</em> it → relaxation (bronchodilation). Gq/Ca²⁺ activates it → contraction (vasoconstriction).
+    </div>
+  </div>
+
+  <!-- ══════════ CARDIAC PKA ══════════ -->
+  <div id="cardiac" class="section">
+    <p class="section-intro">How β1 receptor activation produces four distinct cardiac effects through PKA phosphorylation.</p>
+    <div class="step-dots" id="card-dots"></div>
+    <div class="card" id="card-panel"></div>
+    <div class="step-nav">
+      <button class="btn" id="card-prev" onclick="cardMove(-1)">← Back</button>
+      <span class="step-counter" id="card-label"></span>
+      <button class="btn btn-primary" id="card-next" onclick="cardMove(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ DRUG TARGETS ══════════ -->
+  <div id="drugs" class="section">
+    <p class="section-intro">Key drug classes acting on adrenergic pathways, organised by receptor target.</p>
+    <div class="grid2">
+      <div class="card">
+        <span class="tag tag-coral">Alpha-1 (α1) drugs</span>
+        <div class="row"><span class="row-label">Prazosin</span><span class="row-detail">α1 antagonist. Vasodilation → ↓ BP. Also used in BPH (relaxes urethral sphincter).</span></div>
+        <div class="row"><span class="row-label">Tamsulosin</span><span class="row-detail">Selective α1A antagonist. BPH-focused — fewer BP effects than prazosin.</span></div>
+        <div class="row"><span class="row-label">Phenylephrine</span><span class="row-detail">α1 agonist. Vasoconstriction → ↑ BP. Decongestant. Used in septic shock.</span></div>
+        <div class="row"><span class="row-label">Noradrenaline</span><span class="row-detail">Primarily α1 + β1 agonist. Vasopressor in septic shock.</span></div>
+      </div>
+      <div class="card">
+        <span class="tag tag-coral">Alpha-2 (α2) drugs</span>
+        <div class="row"><span class="row-label">Clonidine</span><span class="row-detail">α2 agonist → ↓ central sympathetic outflow → ↓ BP and HR. Also ADHD and opioid withdrawal.</span></div>
+        <div class="row"><span class="row-label">Methyldopa</span><span class="row-detail">Prodrug → α-methylnoradrenaline → α2 agonist. Safe in pregnancy hypertension.</span></div>
+        <div class="row"><span class="row-label">Yohimbine</span><span class="row-detail">α2 antagonist → ↑ NA release. Research use; risk of anxiety and hypertension.</span></div>
+      </div>
+      <div class="card">
+        <span class="tag tag-purple">Beta-1 (β1) drugs</span>
+        <div class="row"><span class="row-label">Metoprolol</span><span class="row-detail">β1-selective antagonist. ↓ HR, ↓ BP. Hypertension, heart failure, angina, post-MI.</span></div>
+        <div class="row"><span class="row-label">Bisoprolol</span><span class="row-detail">Highly β1-selective. First-line in chronic heart failure.</span></div>
+        <div class="row"><span class="row-label">Atenolol</span><span class="row-detail">β1-selective, renally cleared. Hypertension, angina.</span></div>
+        <div class="row"><span class="row-label">Dobutamine</span><span class="row-detail">β1 agonist (+ some β2). ↑ contractility. Acute heart failure, cardiogenic shock.</span></div>
+        <div class="row"><span class="row-label">Propranolol</span><span class="row-detail">Non-selective β1+β2 blocker. Caution in asthma — blocks β2 bronchodilation.</span></div>
+      </div>
+      <div class="card">
+        <span class="tag tag-purple">Beta-2 (β2) drugs</span>
+        <div class="row"><span class="row-label">Salbutamol</span><span class="row-detail">SABA — rapid bronchodilation. Reliever inhaler in asthma.</span></div>
+        <div class="row"><span class="row-label">Salmeterol</span><span class="row-detail">LABA — 12-hour duration. Maintenance inhaler in asthma/COPD.</span></div>
+        <div class="row"><span class="row-label">Formoterol</span><span class="row-detail">LABA — fast-acting as well as long-acting. Reliever and preventer.</span></div>
+        <div class="row"><span class="row-label">Ritodrine</span><span class="row-detail">β2 agonist → uterine relaxation. Tocolytic to delay premature labour.</span></div>
+      </div>
+      <div class="card">
+        <span class="tag tag-gray">Beta-3 (β3) drugs</span>
+        <div class="row"><span class="row-label">Mirabegron</span><span class="row-detail">β3 agonist. Relaxes detrusor → ↑ bladder capacity. Overactive bladder. Alternative to antimuscarinics (avoids dry-mouth side effects).</span></div>
+      </div>
+      <div class="card">
+        <span class="tag tag-gray">Non-selective / other</span>
+        <div class="row"><span class="row-label">Adrenaline</span><span class="row-detail">All adrenergic receptors. Anaphylaxis (IM 1:1000), cardiac arrest (IV 1:10000).</span></div>
+        <div class="row"><span class="row-label">Milrinone</span><span class="row-detail">PDE inhibitor — prevents cAMP breakdown → mimics β1 stimulation. Acute decompensated heart failure.</span></div>
+        <div class="row"><span class="row-label">Ivabradine</span><span class="row-detail">HCN channel blocker → ↓ If current → ↓ HR only. No effect on contractility or BP. Angina, heart failure.</span></div>
+        <div class="row"><span class="row-label">Carvedilol</span><span class="row-detail">Non-selective β blocker + α1 blocker. ↓ HR + vasodilation. Chronic heart failure, hypertension.</span></div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Selectivity matters:</strong> β1-selective blockers (metoprolol, bisoprolol, atenolol) are preferred over non-selective ones (propranolol) in asthmatic patients — blocking β2 would cause bronchoconstriction. Selectivity is relative; at high doses even "selective" agents cross over to β2.
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.getElementById(id).classList.add('visible');
+  const ids = ['ans','sympathetic','receptors','cascades','cardiac','drugs'];
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', ids[i] === id));
+}
+
+/* ── SYMPATHETIC STEPPER ── */
+const sympSteps = [
+  { tag:'tag-coral', tagTxt:'Stage 1 — CNS', title:'Threat detected → hypothalamus fires',
+    body:`<p>A stressor (real or perceived) activates the <strong>hypothalamus</strong>, which integrates sensory, emotional, and cognitive input and sends signals down the spinal cord to preganglionic sympathetic neurons — the thoracolumbar outflow (T1–L2).</p>
+    <div class="callout"><strong>Key concept:</strong> The hypothalamus can't distinguish a physical threat from a psychological one — a stressful exam triggers the same cascade as a predator.</div>` },
+  { tag:'tag-coral', tagTxt:'Stage 2 — First synapse', title:'Preganglionic → ganglion (ACh / Nn)',
+    body:`<p>Short preganglionic fibres leave the spinal cord and synapse in <strong>paravertebral or prevertebral ganglia</strong>. This synapse is identical in both divisions of the ANS.</p>
+    <div class="row"><span class="row-label">Neurotransmitter</span><span class="row-detail">Acetylcholine (ACh)</span></div>
+    <div class="row"><span class="row-label">Receptor</span><span class="row-detail">Nicotinic Nn — ionotropic, fast Na⁺/K⁺ channel (milliseconds)</span></div>
+    <div class="row"><span class="row-label">Same in para?</span><span class="row-detail">Yes — both divisions use ACh/Nn at the first synapse. Divergence comes next.</span></div>
+    <div class="callout"><strong>Ganglion blockers</strong> like hexamethonium block both divisions simultaneously. Not clinically used now due to indiscriminate effects on heart, gut, and BP.</div>` },
+  { tag:'tag-coral', tagTxt:'Stage 3 — Second synapse', title:'Postganglionic → target organ (NA)',
+    body:`<p>Long postganglionic fibres travel from the ganglion to target organs, releasing <strong>noradrenaline (NA)</strong> onto adrenergic receptors. This is the defining feature of sympathetic transmission.</p>
+    <div class="row"><span class="row-label">Neurotransmitter</span><span class="row-detail">Noradrenaline (NA)</span></div>
+    <div class="row"><span class="row-label">Receptors</span><span class="row-detail">Adrenergic — α1, α2, β1, β2, β3 (subtype determines the effect)</span></div>
+    <div class="row"><span class="row-label">Exception</span><span class="row-detail">Sweat glands — sympathetically innervated but uses ACh → muscarinic M (exam favourite)</span></div>
+    <div class="row"><span class="row-label">Adrenal medulla</span><span class="row-detail">Preganglionic fibres directly innervate the medulla (a modified ganglion) → releases adrenaline (80%) + NA (20%) into blood → systemic amplification</span></div>` },
+  { tag:'tag-coral', tagTxt:'Stage 4 — Body-wide effects', title:'Fight-or-flight in action',
+    body:`<p>All effects serve one goal: maximise physical performance for survival. Non-essential functions are suppressed.</p>
+    <div class="row"><span class="row-label">Heart</span><span class="row-detail">↑ rate and force <span class="badge badge-purple">β1</span></span></div>
+    <div class="row"><span class="row-label">Lungs</span><span class="row-detail">Bronchodilation — more O₂ in <span class="badge badge-purple">β2</span></span></div>
+    <div class="row"><span class="row-label">Blood vessels</span><span class="row-detail">Skin/gut vasoconstriction → redirects blood to muscles <span class="badge">α1</span></span></div>
+    <div class="row"><span class="row-label">Pupils</span><span class="row-detail">Mydriasis (dilation) — better vision <span class="badge">α1</span></span></div>
+    <div class="row"><span class="row-label">Liver</span><span class="row-detail">Glycogenolysis → ↑ blood glucose for energy <span class="badge badge-purple">β2</span></span></div>
+    <div class="row"><span class="row-label">GI tract</span><span class="row-detail">↓ motility, sphincter contraction <span class="badge">α1</span></span></div>
+    <div class="row"><span class="row-label">Sweat glands</span><span class="row-detail">↑ secretion — ACh → muscarinic M (the exception!) <span class="badge badge-teal">M</span></span></div>` }
+];
+let sympIdx = 0;
+function sympRender() {
+  const s = sympSteps[sympIdx];
+  document.getElementById('symp-panel').innerHTML = `<span class="tag ${s.tag}">${s.tagTxt}</span><div class="card-title">${s.title}</div>${s.body}`;
+  document.getElementById('symp-label').textContent = `${sympIdx+1} / ${sympSteps.length}`;
+  document.getElementById('symp-prev').disabled = sympIdx === 0;
+  const nb = document.getElementById('symp-next');
+  nb.textContent = sympIdx === sympSteps.length-1 ? '↻ Restart' : 'Next →';
+  nb.className = sympIdx === sympSteps.length-1 ? 'btn' : 'btn btn-primary';
+  document.getElementById('symp-dots').innerHTML = sympSteps.map((_,i) =>
+    `<div class="dot${i===sympIdx?' active':''}" onclick="sympGo(${i})"></div>`).join('');
+}
+function sympMove(d) {
+  sympIdx = (d===1 && sympIdx===sympSteps.length-1) ? 0 : Math.max(0, Math.min(sympSteps.length-1, sympIdx+d));
+  sympRender();
+}
+function sympGo(i) { sympIdx=i; sympRender(); }
+sympRender();
+
+/* ── RECEPTORS ── */
+const receptors = [
+  { name:'α1', colorTag:'tag-coral', gp:'Gq protein', msg:'PLC → IP3 + DAG → ↑ Ca²⁺, PKC',
+    loc:'Vascular smooth muscle, iris dilator, sphincters, skin/gut vessels',
+    effects:'Vasoconstriction, mydriasis, sphincter contraction, ↑ BP',
+    drugs:'<strong>Agonists:</strong> phenylephrine, noradrenaline.<br><strong>Antagonists:</strong> prazosin, tamsulosin, doxazosin.',
+    note:'Gq → PLC → cleaves PIP2 into IP3 + DAG. IP3 triggers Ca²⁺ release from the ER; DAG stays in membrane and activates PKC. Both converge to activate myosin light chain kinase → smooth muscle contraction.' },
+  { name:'α2', colorTag:'tag-coral', gp:'Gi protein', msg:'Inhibits adenylyl cyclase → ↓ cAMP',
+    loc:'Presynaptic nerve terminals, CNS (locus coeruleus), pancreatic β cells, platelets',
+    effects:'↓ NA release (negative feedback), ↓ BP, CNS sedation, ↓ insulin secretion, platelet aggregation',
+    drugs:'<strong>Agonists:</strong> clonidine, methyldopa, dexmedetomidine.<br><strong>Antagonists:</strong> yohimbine.',
+    note:'Primarily functions as a presynaptic autoreceptor — high synaptic NA activates α2 → reduces further release. Gi inhibits adenylyl cyclase → less cAMP → less PKA → less neurotransmitter exocytosis.' },
+  { name:'β1', colorTag:'tag-purple', gp:'Gs protein', msg:'Activates adenylyl cyclase → ↑ cAMP → ↑ PKA',
+    loc:'SA node, AV node, ventricular myocytes, kidney (juxtaglomerular apparatus)',
+    effects:'↑ heart rate (chronotropy), ↑ contractility (inotropy), ↑ AV conduction (dromotropy), ↑ relaxation rate (lusitropy), ↑ renin release',
+    drugs:'<strong>Agonists:</strong> dobutamine, adrenaline, isoprenaline.<br><strong>Selective antagonists:</strong> metoprolol, bisoprolol, atenolol.<br><strong>Non-selective:</strong> propranolol, carvedilol.',
+    note:'PKA phosphorylates HCN channels (cAMP also directly gates them → ↑ If → faster pacemaker slope), L-type Ca²⁺ channels (↑ influx), RyR2 (↑ SR Ca²⁺ release), phospholamban (faster SERCA2a reuptake → lusitropy), and troponin I (faster Ca²⁺ release from filaments).' },
+  { name:'β2', colorTag:'tag-purple', gp:'Gs protein', msg:'Activates adenylyl cyclase → ↑ cAMP → ↑ PKA',
+    loc:'Airway smooth muscle, skeletal muscle vasculature, uterus, liver, mast cells',
+    effects:'Bronchodilation, vasodilation (skeletal muscle vessels), uterine relaxation, glycogenolysis, ↓ mast cell degranulation',
+    drugs:'<strong>SABAs:</strong> salbutamol (albuterol), terbutaline.<br><strong>LABAs:</strong> salmeterol, formoterol.<br><strong>Tocolytic:</strong> ritodrine.',
+    note:'Same Gs/cAMP/PKA mechanism as β1, but expressed in different tissues. In smooth muscle, PKA phosphorylates myosin light chain kinase to INACTIVATE it → relaxation (opposite to Gq/α1 pathway). This is why β2 agonists relax airways and β1 makes the heart contract harder.' },
+  { name:'β3', colorTag:'tag-purple', gp:'Gs protein', msg:'Activates adenylyl cyclase → ↑ cAMP → ↑ PKA',
+    loc:'Adipose tissue (white and brown), bladder detrusor muscle',
+    effects:'Lipolysis (fat breakdown for energy), bladder detrusor relaxation (↑ storage capacity), thermogenesis in brown fat',
+    drugs:'<strong>Agonists:</strong> mirabegron (overactive bladder).<br>No clinically used antagonists.',
+    note:'Less cardiovascular relevance than β1/β2. Mirabegron was developed as a β3 agonist alternative to antimuscarinics for overactive bladder — relaxes the detrusor without the dry-mouth, constipation, and cognitive side effects of muscarinic blockade.' },
+];
+let selRec = null;
+function renderRecGrid() {
+  const tagMap = { 'tag-coral': '#c94a28', 'tag-purple': '#5c3fa0' };
+  document.getElementById('rec-grid').innerHTML = receptors.map((r,i) => `
+    <div class="receptor-card${selRec===i?' selected':''}" onclick="selectRec(${i})">
+      <div class="rec-name">${r.name}</div>
+      <div class="rec-gp">${r.gp.split(' ')[0]}</div>
+      <div class="rec-msg" style="font-size:11px">${r.msg.split('→')[0].trim()}</div>
+    </div>`).join('');
+}
+function selectRec(i) {
+  selRec = i; renderRecGrid();
+  const r = receptors[i];
+  document.getElementById('rec-detail').innerHTML = `
+    <span class="tag ${r.colorTag}">${r.name} — ${r.gp}</span>
+    <div class="card-title">${r.name} adrenergic receptor</div>
+    <div class="row"><span class="row-label">Second messenger</span><span class="row-detail">${r.msg}</span></div>
+    <div class="row"><span class="row-label">Location</span><span class="row-detail">${r.loc}</span></div>
+    <div class="row"><span class="row-label">Key effects</span><span class="row-detail">${r.effects}</span></div>
+    <div class="row"><span class="row-label">Drugs</span><span class="row-detail">${r.drugs}</span></div>
+    <div class="callout"><strong>Mechanism detail:</strong> ${r.note}</div>`;
+}
+renderRecGrid();
+
+/* ── CARDIAC PKA STEPPER ── */
+const cardSteps = [
+  { tag:'tag-blue', tagTxt:'Step 1 — receptor', title:'β1 binds NA → Gs activates adenylyl cyclase',
+    body:`<p>Noradrenaline (or adrenaline) binds the β1 receptor on a <strong>sinoatrial (SA) node cell</strong>. The receptor undergoes conformational change, allowing Gsα to exchange GDP for GTP, dissociate, and activate adenylyl cyclase on the inner membrane.</p>
+    <div class="callout"><strong>SA node:</strong> β1 receptors are densely expressed here. The SA node generates spontaneous action potentials — sympathetic input accelerates the rate of these spontaneous depolarisations by shortening the interval between each beat.</div>` },
+  { tag:'tag-blue', tagTxt:'Step 2 — cAMP', title:'Adenylyl cyclase converts ATP → cAMP → PKA released',
+    body:`<p>Adenylyl cyclase converts <strong>ATP → cyclic AMP (cAMP)</strong>. cAMP diffuses through the cytoplasm and binds the regulatory (R) subunits of protein kinase A (PKA), causing the active catalytic (C) subunits to dissociate and become free to phosphorylate substrates.</p>
+    <div class="row"><span class="row-label">Termination</span><span class="row-detail">Phosphodiesterase (PDE) degrades cAMP → AMP, ending the signal</span></div>
+    <div class="callout"><strong>PDE inhibitors</strong> (milrinone, theophylline) block this step → sustained ↑ cAMP → mimic β1 stimulation continuously, even without receptor activation.</div>` },
+  { tag:'tag-purple', tagTxt:'Step 3 — HCN channels', title:'cAMP gates HCN channels → ↑ heart rate (chronotropy)',
+    body:`<p>The <strong>"funny current" (If)</strong> flows through HCN (hyperpolarisation-activated cyclic nucleotide-gated) channels — an inward Na⁺/K⁺ current that drives the slow spontaneous depolarisation between beats in the SA node.</p>
+    <div class="row"><span class="row-label">Direct cAMP gating</span><span class="row-detail">cAMP binds HCN channels directly (no PKA needed) → channels open at less negative voltages → If activates sooner after each beat</span></div>
+    <div class="row"><span class="row-label">Result</span><span class="row-detail">Steeper pacemaker slope → threshold reached sooner → SA node fires more frequently</span></div>
+    <div class="callout"><strong>Ivabradine</strong> specifically blocks HCN channels → ↓ heart rate without affecting contractility, blood pressure, or AV conduction. Used in stable angina and heart failure.</div>` },
+  { tag:'tag-purple', tagTxt:'Step 4 — Ca²⁺ channels', title:'PKA phosphorylates L-type Ca²⁺ channels → ↑ contractility (inotropy)',
+    body:`<p>In <strong>ventricular myocytes</strong>, PKA phosphorylates L-type calcium channels (LTCC). The channels open more readily and remain open longer, increasing Ca²⁺ influx during each action potential — the mechanism behind positive inotropy.</p>
+    <div class="row"><span class="row-label">L-type Ca²⁺ channel</span><span class="row-detail">PKA phosphorylation → opens at lower threshold, stays open longer → ↑ Ca²⁺ influx per beat</span></div>
+    <div class="row"><span class="row-label">RyR2</span><span class="row-detail">PKA also phosphorylates ryanodine receptor 2 on the SR → amplified Ca²⁺-induced Ca²⁺ release (CICR) into cytoplasm</span></div>
+    <div class="row"><span class="row-label">Net result</span><span class="row-detail">Much more cytoplasmic Ca²⁺ → greater actin-myosin cross-bridging → stronger, faster contraction</span></div>` },
+  { tag:'tag-purple', tagTxt:'Step 5 — relaxation', title:'PKA phosphorylates phospholamban + troponin I → lusitropy',
+    body:`<p>Alongside force, β1 activation also speeds up <strong>relaxation (lusitropy)</strong> — critical for adequate ventricular filling at high heart rates.</p>
+    <div class="row"><span class="row-label">Phospholamban (PLB)</span><span class="row-detail">PKA phosphorylates PLB → relieves its inhibition of SERCA2a → pump works faster → Ca²⁺ rapidly re-sequestered into SR → ventricle relaxes and refills quickly</span></div>
+    <div class="row"><span class="row-label">Troponin I</span><span class="row-detail">PKA phosphorylation → reduced Ca²⁺ sensitivity of contractile filaments → actin-myosin detachment is faster</span></div>
+    <div class="callout"><strong>Why beta-blockers help in heart failure:</strong> Chronic PKA overstimulation causes receptor downregulation, mitochondrial dysfunction, arrhythmia, and fibrosis. Beta-blockers (metoprolol, bisoprolol, carvedilol) reduce this toxicity and paradoxically improve long-term cardiac function despite acutely reducing contractility.</div>` },
+  { tag:'tag-amber', tagTxt:'Summary', title:'Four cardiac effects of β1 activation',
+    body:`<div class="row"><span class="row-label">Chronotropy ↑ HR</span><span class="row-detail">cAMP directly gates HCN channels → If activates sooner → SA node fires more rapidly</span></div>
+    <div class="row"><span class="row-label">Inotropy ↑ force</span><span class="row-detail">PKA → ↑ L-type Ca²⁺ + ↑ RyR2 → more cytoplasmic Ca²⁺ → stronger contraction</span></div>
+    <div class="row"><span class="row-label">Lusitropy ↑ relaxation</span><span class="row-detail">PKA → phospholamban + troponin I → faster Ca²⁺ reuptake and filament release</span></div>
+    <div class="row"><span class="row-label">Dromotropy ↑ conduction</span><span class="row-detail">PKA accelerates AV node conduction → impulse reaches ventricles faster</span></div>
+    <div class="callout"><strong>Drug comparison:</strong> Dobutamine (β1 agonist) increases all four. Ivabradine reduces chronotropy only. Metoprolol reduces all four. Milrinone (PDE inhibitor) elevates cAMP → same downstream effects as β1 activation without receptor binding.</div>` }
+];
+let cardIdx = 0;
+function cardRender() {
+  const s = cardSteps[cardIdx];
+  document.getElementById('card-panel').innerHTML = `<span class="tag ${s.tag}">${s.tagTxt}</span><div class="card-title">${s.title}</div>${s.body}`;
+  document.getElementById('card-label').textContent = `${cardIdx+1} / ${cardSteps.length}`;
+  document.getElementById('card-prev').disabled = cardIdx === 0;
+  const nb = document.getElementById('card-next');
+  nb.textContent = cardIdx === cardSteps.length-1 ? '↻ Restart' : 'Next →';
+  nb.className = cardIdx === cardSteps.length-1 ? 'btn' : 'btn btn-primary';
+  document.getElementById('card-dots').innerHTML = cardSteps.map((_,i) =>
+    `<div class="dot${i===cardIdx?' active':''}" onclick="cardGo(${i})"></div>`).join('');
+}
+function cardMove(d) {
+  cardIdx = (d===1 && cardIdx===cardSteps.length-1) ? 0 : Math.max(0, Math.min(cardSteps.length-1, cardIdx+d));
+  cardRender();
+}
+function cardGo(i) { cardIdx=i; cardRender(); }
+cardRender();
+</script>
+</body>
+</html>
